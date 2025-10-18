@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Calendar Assistant - Voice Interface</title>
+</head>
+<body>
+    <h1>AI Calendar Assistant</h1>
+
+    <button id="record">Start Recording</button>
+    <button id="stop" disabled>Stop Recording</button>
+
+    <p id="status">Click "Start Recording" to begin</p>
+
+    <script>
+        let chunks = [];
+        let mediaRecorder;
+
+        const recordButton = document.getElementById('record');
+        const stopButton = document.getElementById('stop');
+        const statusElem = document.getElementById('status');
+
+        recordButton.onclick = async () => {
+            let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            statusElem.textContent = 'Recording...';
+
+            mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+            mediaRecorder.onstop = async () => {
+                statusElem.textContent = 'Processing audio...';
+                let blob = new Blob(chunks, { type: 'audio/wav' });
+                chunks = [];
+
+                // Play back the recorded audio immediately for confirmation
+                let audioUrl = URL.createObjectURL(blob);
+                let audio = new Audio(audioUrl);
+                audio.onplay = () => {
+                    statusElem.textContent = 'Playing back your recording...';
+                };
+                audio.onended = () => {
+                    statusElem.textContent = 'Playback finished.';
+                };
+                audio.onerror = (e) => {
+                    statusElem.textContent = 'Error playing back audio';
+                    console.error('Audio playback error', e);
+                };
+                audio.play();
+            };
+
+            recordButton.disabled = true;
+            stopButton.disabled = false;
+        };
+
+        stopButton.onclick = () => {
+            mediaRecorder.stop();
+            recordButton.disabled = false;
+            stopButton.disabled = true;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Calendar Assistant</title>
+</head>
+<body>
+    <h1>AI Calendar Assistant</h1>
+    <button id="record-btn">Start Recording</button>
+    <button id="stop-btn" disabled>Stop Recording</button>
+    <div id="status">Click "Start Recording" to begin</div>
+    <hr>
+    <div>
+        <strong>Assistant Response:</strong>
+        <div id="assistant-response" style="margin-top:10px;"></div>
+    </div>
+    <script>
+        let mediaRecorder, chunks = [];
+        const recordBtn = document.getElementById('record-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const status = document.getElementById('status');
+        const responseDiv = document.getElementById('assistant-response');
+
+        recordBtn.onclick = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            status.textContent = 'Recording...';
+            chunks = [];
+            mediaRecorder.ondataavailable = e => chunks.push(e.data);
+            recordBtn.disabled = true;
+            stopBtn.disabled = false;
+        };
+
+        stopBtn.onclick = () => {
+            mediaRecorder.stop();
+            status.textContent = 'Stopped. Sending audio...';
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+        };
+
+        if (window.MediaRecorder) {
+            mediaRecorder && (mediaRecorder.onstop = async () => {
+                status.textContent = 'Processing audio...';
+                let blob = new Blob(chunks, { type: 'audio/wav' });
+                chunks = [];
+                // Send audio to server and get response
+                let formData = new FormData();
+                formData.append('audio_data', blob);
+                const resp = await fetch('/interact', {method: 'POST', body: formData});
+                const data = await resp.json();
+                // Show assistant's response text
+                responseDiv.textContent = data.text_response;
+                // Play back the audio response
+                let audioUrl = URL.createObjectURL(
+                    new Blob([Uint8Array.from(atob(data.audio_b64), c => c.charCodeAt(0))], {type: 'audio/wav'})
+                );
+                let audio = new Audio(audioUrl);
+                audio.play();
+                status.textContent = 'Playback complete. Ready for next request.';
+            });
+        }
+    </script>
+</body>
+</html>
