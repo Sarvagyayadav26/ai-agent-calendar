@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Calendar Assistant</title>
+</head>
+<body>
+    <h1>AI Calendar Assistant</h1>
+    <input type="text" id="user-input" placeholder="Type your question here..." style="width:300px;">
+    <button id="send-btn">Send</button>
+    <div id="status">Type your query and click Send.</div>
+    <hr>
+    <div>
+        <strong>Assistant Response:</strong>
+        <div id="assistant-response" style="margin-top:10px;"></div>
+    </div>
+    <script>
+        const sendBtn = document.getElementById('send-btn');
+        const inputBox = document.getElementById('user-input');
+        const status = document.getElementById('status');
+        const responseDiv = document.getElementById('assistant-response');
+        
+        sendBtn.onclick = async () => {
+            let userText = inputBox.value;
+            if (!userText.trim()) {
+                status.textContent = "Please enter a question.";
+                return;
+            }
+            status.textContent = "Processing...";
+
+            const resp = await fetch('/interact', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text_input: userText})
+         });
+
+            const data = await resp.json();
+            responseDiv.textContent = data.text_response;
+            status.textContent = "Ready for next request.";
+        };
+    </script>
+</body>
+</html>
