@@ -10,7 +10,14 @@ from google_calendar import GoogleCalendar
 
 app = Flask(__name__)
 
-calendar_service = GoogleCalendar()
+try:
+    calendar_service = GoogleCalendar()
+    print("GoogleCalendar instance created")
+    sys.stdout.flush()
+except Exception as e:
+    print("GoogleCalendar error:", e)
+    sys.stdout.flush()
+
 ai_agent = AIAgent(calendar_service)
 
 @app.route('/')
@@ -37,4 +44,5 @@ if __name__ == '__main__':
     # Open the browser after a short delay to ensure the server is running
     Timer(1, lambda: webbrowser.open(url)).start()
     app.run(debug=True, port=port)
+
 
