@@ -1,3 +1,7 @@
+import sys
+print("main_text.py STARTED")  # Add this as the first line
+sys.stdout.flush()
+
 import webbrowser
 from threading import Timer
 from flask import Flask, render_template, request, jsonify
@@ -33,3 +37,4 @@ if __name__ == '__main__':
     # Open the browser after a short delay to ensure the server is running
     Timer(1, lambda: webbrowser.open(url)).start()
     app.run(debug=True, port=port)
+
