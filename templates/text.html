@@ -34,9 +34,10 @@
          });
 
             const data = await resp.json();
-            responseDiv.textContent = data.text_response;
+            responseDiv.innerHTML  = data.text_response;
             status.textContent = "Ready for next request.";
         };
     </script>
 </body>
 </html>
+
