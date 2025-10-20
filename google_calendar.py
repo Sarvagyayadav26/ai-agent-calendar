@@ -7,7 +7,6 @@ from google.auth.transport.requests import Request
 import os
 import json
 from google.oauth2.credentials import Credentials
-from google_calendar import GoogleCalendar  # your class
 
 class GoogleCalendar:
     # flow = InstalledAppFlow.from_client_secrets_file('credentials.json', self.SCOPES)
@@ -52,6 +51,7 @@ class GoogleCalendar:
         created_event = self.service.events().insert(calendarId='primary', body=event).execute()
         event_url = created_event.get('htmlLink')
         webbrowser.open(event_url)  # This opens the link in the user's default browser
+
 
 
 
