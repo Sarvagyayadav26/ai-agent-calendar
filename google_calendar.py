@@ -14,11 +14,16 @@ class GoogleCalendar:
     'https://www.googleapis.com/auth/calendar', 
     'https://www.googleapis.com/auth/calendar.events'
 ]
-    def __init__(self):
+    def __init__(self, credentials=None):
         self.creds = None
         self.service = None
         self.authenticate()
-    
+        if credentials:
+            self.creds = credentials
+        else:
+            self.creds = None
+            self.authenticate()
+
 
     #
     def authenticate(self):
@@ -51,6 +56,7 @@ class GoogleCalendar:
         created_event = self.service.events().insert(calendarId='primary', body=event).execute()
         event_url = created_event.get('htmlLink')
         webbrowser.open(event_url)  # This opens the link in the user's default browser
+
 
 
 
