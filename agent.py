@@ -104,6 +104,7 @@ class AIAgent:
             import webbrowser
             webbrowser.open(event_url)  # This opens the link in the user's default browser
         
-        return f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration})"
+        # return f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration})"
+
 
 
