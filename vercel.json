@@ -1,10 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "main_text.py", "use": "@vercel/python" }
+    { "src": "main_text_old.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/main_text.py" }
+    { "src": "/(.*)", "dest": "/main_text_old.py" }
   ]
 }
+
 
