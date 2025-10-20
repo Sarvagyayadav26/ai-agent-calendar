@@ -19,21 +19,24 @@ class GoogleCalendar:
 
     #
     def authenticate(self):
-        token_path = '/tmp/token.json'  # writable directory for token
-    
-        if os.path.exists(token_path):
-            self.creds = Credentials.from_authorized_user_file(token_path, self.SCOPES)
-    
+        # Load credentials from environment variable
+        creds_data = os.getenv('GOOGLE_CREDENTIALS')
+        if creds_data:
+            creds_dict = json.loads(creds_data)
+            self.creds = Credentials.from_authorized_user_info(creds_dict, self.SCOPES)
+        
+        # Refresh token if expired
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
             else:
+                # Only for local development: interactive flow
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', self.SCOPES)
                 self.creds = flow.run_local_server(port=5000)
-            with open(token_path, 'w') as token:
-                token.write(self.creds.to_json())
-
+        
+        # Build the calendar service
         self.service = build('calendar', 'v3', credentials=self.creds)
+
     
         #
     def create_event(self, summary, start_time, end_time):
@@ -45,4 +48,5 @@ class GoogleCalendar:
         created_event = self.service.events().insert(calendarId='primary', body=event).execute()
         event_url = created_event.get('htmlLink')
         webbrowser.open(event_url)  # This opens the link in the user's default browser
+
 
