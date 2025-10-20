@@ -37,6 +37,8 @@ def handler(request, context=None):
     from vercel_wsgi import handle
     return handle(app, request, context)
 # ---------------------------
+def handler(request, context=None):
+    return handle(app, request, context)
 
 
 
