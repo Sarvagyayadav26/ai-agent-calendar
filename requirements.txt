@@ -3,5 +3,5 @@ google-api-python-client==2.99.0
 google-auth-httplib2==0.1.0
 google-auth-oauthlib==1.0.0
 dateparser==1.1.1
-google-generativeai
-
+google-generativeai==0.1.1  # replace with latest if needed
+vercel-wsgi==0.7.0
