@@ -8,6 +8,11 @@ from werkzeug.serving import run_simple
 app = Flask(__name__)
 
 # Initialize your services
+creds_data = os.getenv('GOOGLE_CREDENTIALS')
+if not creds_data:
+    raise ValueError("GOOGLE_CREDENTIALS environment variable not set")
+creds_dict = json.loads(creds_data)
+creds = Credentials.from_authorized_user_info(creds_dict)
 calendar_service = GoogleCalendar(credentials=creds)
 ai_agent = AIAgent(calendar_service)
 
@@ -28,4 +33,5 @@ def handler(request, context=None):
     from vercel_wsgi import handle
     return handle(app, request, context)
 # ---------------------------
+
 
