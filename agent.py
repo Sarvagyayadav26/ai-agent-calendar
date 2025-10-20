@@ -78,7 +78,6 @@ class AIAgent:
             return "Error parsing GPT response"
 
     def schedule_meeting(self, start_dt, end_dt, duration):
-        print("schedule_meeting called with:", start_dt, end_dt, duration)
         event = {
             'summary': 'Meeting',
             'start': {
@@ -90,21 +89,25 @@ class AIAgent:
                 'timeZone': 'America/Los_Angeles',
             },
         }
-        print("event created test:", event)
-        
-        # Assuming create_event returns a calendar event URL or relevant identifier
+    
         event_url = self.calendar_service.create_event(
             event['summary'], 
             event['start']['dateTime'], 
             event['end']['dateTime']
         )
-
+    
+        # Build a message for the webpage
         if event_url:
-            return event_url
-            import webbrowser
-            webbrowser.open(event_url)  # This opens the link in the user's default browser
-        
-        # return f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration})"
+            message = (f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} "
+                       f"to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration}). "
+                       f"Click here to view: {event_url}")
+        else:
+            message = f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} " \
+                      f"to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration})."
+    
+        return message
+
+
 
 
 
