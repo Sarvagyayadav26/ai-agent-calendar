@@ -56,6 +56,8 @@ class GoogleCalendar:
         created_event = self.service.events().insert(calendarId='primary', body=event).execute()
         event_url = created_event.get('htmlLink')
         webbrowser.open(event_url)  # This opens the link in the user's default browser
+        return event_url
+
 
 
 
