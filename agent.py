@@ -98,14 +98,17 @@ class AIAgent:
     
         # Build a message for the webpage
         if event_url:
+            # Make the URL clickable using HTML <a> tag
             message = (f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} "
                        f"to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration}). "
-                       f"Click here to view: {event_url}")
+                       f"<a href='{event_url}' target='_blank'>Click here to view the event</a>")
         else:
-            message = f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} " \
-                      f"to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration})."
+            message = (f"Meeting scheduled from {start_dt.strftime('%Y-%m-%d %H:%M')} "
+                       f"to {end_dt.strftime('%Y-%m-%d %H:%M')} ({duration}).")
     
         return message
+
+
 
 
 
