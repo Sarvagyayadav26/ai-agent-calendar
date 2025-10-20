@@ -8,7 +8,7 @@ from werkzeug.serving import run_simple
 app = Flask(__name__)
 
 # Initialize your services
-calendar_service = GoogleCalendar()
+calendar_service = GoogleCalendar(credentials=creds)
 ai_agent = AIAgent(calendar_service)
 
 @app.route('/')
@@ -28,3 +28,4 @@ def handler(request, context=None):
     from vercel_wsgi import handle
     return handle(app, request, context)
 # ---------------------------
+
