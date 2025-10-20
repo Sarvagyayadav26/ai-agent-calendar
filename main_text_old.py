@@ -3,6 +3,10 @@ from agent import AIAgent
 from google_calendar import GoogleCalendar
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
+import os
+import json
+from google.oauth2.credentials import Credentials
+from google_calendar import GoogleCalendar  # your class
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -33,5 +37,6 @@ def handler(request, context=None):
     from vercel_wsgi import handle
     return handle(app, request, context)
 # ---------------------------
+
 
 
